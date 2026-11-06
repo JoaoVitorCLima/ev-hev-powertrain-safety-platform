@@ -1,0 +1,19 @@
+# Native compilations, generated traces, IDE files
+build/
+build-msvc/
+.vs/
+*.exe
+*.obj
+*.o
+*.a
+*.lib
+__pycache__/
+*.pyc
+.pytest_cache/
+data/*.csv
+results/
+*.asv
+*.slxc
+slprj/
+*.autosave
+.DS_Store

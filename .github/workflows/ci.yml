@@ -1,0 +1,22 @@
+name: Cross-platform C++ and Python SIL regression
+on: [push, pull_request]
+jobs:
+  linux-sil:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Configure and build C++17 ECU
+        run: cmake -S . -B build && cmake --build build
+      - name: Full C++/Python regression
+        run: python -m unittest discover -s tests -v
+      - name: Run BEV and series-HEV nominal traces
+        run: python python/closed_loop_sil.py --vehicle both --fault none
+      - name: Build standalone HTML report
+        run: python python/create_sil_report.py results/closed_loop/bev_none.csv results/closed_loop/hev_none.csv --output results/closed_loop/report.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sil-results
+          path: results/closed_loop/
